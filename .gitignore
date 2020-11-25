@@ -1,0 +1,8 @@
+node_modules
+
+
+// server folder -> config folder
+dev.js
+
+// client folder -> component folder
+Config.js
