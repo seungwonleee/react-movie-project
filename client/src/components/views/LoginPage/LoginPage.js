@@ -27,12 +27,13 @@ function LoginPage(props) {
         dispatch(loginUser(body))
             .then(res => {
                 if (res.payload.loginSuccess) {
+                    // 로그인시 로컬스토리지에 아이디 저장
+                    window.localStorage.setItem('userId', res.payload.userId)
                     props.history.push('/') // 로그인 성공시 LandingPage로 이동
                 } else {
                     alert('Email 과 Password를 다시 확인해주세요.');
                 }
             })
-
     }
 
     return (

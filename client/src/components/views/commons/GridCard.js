@@ -9,7 +9,7 @@ function GridCard(props) {
                 <div style={{ position: 'relative', textAlign: 'center' }}>
                     <a href={`/movie/${props.movieId}`}>
                         <img style={{ height: '300px', width: '100%' }} src={props.image} alt={props.movieName} />
-                        <p>{props.movieName}</p>
+                        <p style={{ background: 'black', height: '3.5rem' }}>{props.movieName}</p>
                     </a>
 
                 </div>
@@ -21,7 +21,7 @@ function GridCard(props) {
             <Col lg={6} md={8} xs={24}>
                 <div style={{ position: 'relative', textAlign: 'center' }}>
                     <img style={{ height: '300px', width: '100%' }} src={props.image} alt={props.actoreName} />
-                    <p>{props.actoreName}</p>
+                    <p style={{ background: 'black', color: 'white', height: '3.5rem' }}>{props.actoreName}</p>
                 </div>
             </Col>
         )

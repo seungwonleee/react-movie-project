@@ -17,7 +17,7 @@ function LandingPage(props) {
 
         axios.get(endpoint)
             .then(res => {
-                console.log(res.data)
+                // console.log(res.data)
                 // 기존의 데이터는 그대로 있으면서 출력 시키고자 할때 불변성 유지 / 새로 나오게 할때는 불변성 유지X
                 setMovies(movies.concat(...res.data.results))
                 setMovieMainImage(res.data.results[0])
@@ -29,37 +29,59 @@ function LandingPage(props) {
         setPage(page + 1);
     }
 
+
+    const onClickHandler = () => {
+        axios.get(`/api/users/logout`)
+            .then(res => {
+                if (res.data.success) {
+                    console.log('logout !!!')
+                    props.history.push('/login');
+                    // 로그아웃시 로컬스토리지 저장된 아이디 삭제
+                    window.localStorage.removeItem('userId');
+                } else {
+                    alert('로그아웃 하는데 실패했습니다.')
+                }
+            });
+    }
+
     return (
-        <div style={{ width: '100%', margin: '0' }}>
-
-            {/* main image 비동기 작업때문에 데이터가 렌더링 되지 않으므로 &&로 값이 할당될때 렌더링하게 하기*/}
-            {movieMainImage &&
-                <MainImage
-                    image={`${IMAGE_BASE_URL}w1280${movieMainImage.backdrop_path}`}
-                    title={movieMainImage.title}
-                    text={movieMainImage.overview} />}
-
-            <div style={{ width: '85%', margin: '1rem auto' }}>
-                <h2>Movies by latest</h2>
-                <hr />
-                {/* movie grid cards */}
-                <Row gutter={[16, 16]}>
-                    {movies && movies.map((movie, index) => (
-                        <GridCard
-                            key={index}
-                            landingPage
-                            movieName={movie.original_title}
-                            image={movie.poster_path ? `${IMAGE_BASE_URL}/w500${movie.poster_path}` : null}
-                            movieId={movie.id}
-                        />
-                    ))}
-                </Row>
+        <>
+            {/* 메뉴바 만들어서 라우팅 시켜주기 *** 아직 미완성 */}
+            <div style={{ display: 'flex', justifyContent: 'flex-end', fontSize: '3rem' }}>
+                <button onClick={onClickHandler}>로그아웃</button>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem' }}>
-                <button onClick={loadMoreItems}>Load More</button>
-            </div>
-        </div >
+            <div style={{ width: '100%', margin: '0' }}>
+
+                {/* main image 비동기 작업때문에 데이터가 렌더링 되지 않으므로 &&로 값이 할당될때 렌더링하게 하기*/}
+                {movieMainImage &&
+                    <MainImage
+                        image={`${IMAGE_BASE_URL}w1280${movieMainImage.backdrop_path}`}
+                        title={movieMainImage.title}
+                        text={movieMainImage.overview} />}
+
+                <div style={{ width: '85%', margin: '1rem auto' }}>
+                    <h2>Movies by latest</h2>
+                    <hr />
+                    {/* movie grid cards */}
+                    <Row gutter={[16, 16]}>
+                        {movies && movies.map((movie, index) => (
+                            <GridCard
+                                key={index}
+                                landingPage
+                                movieName={movie.original_title}
+                                image={movie.poster_path ? `${IMAGE_BASE_URL}/w500${movie.poster_path}` : null}
+                                movieId={movie.id}
+                            />
+                        ))}
+                    </Row>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem' }}>
+                    <button onClick={loadMoreItems}>Load More</button>
+                </div>
+            </div >
+        </>
     )
 }
 

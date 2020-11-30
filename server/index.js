@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const config = require('./config/key');
 const { auth } = require('./middleware/auth');
 const { User } = require('./models/User');
+const { Favorite } = require('./models/Favorite');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -20,6 +21,9 @@ mongoose.connect(config.mongoURI, {
     useCreateIndex: true
 }).then(() => { console.log('MongoDB Connected...') })
     .catch(error => console.log(error))
+
+
+// 여기서부터 user DB 관리
 
 app.post('/api/users/register', (req, res) => {
     //회원 가입할 때 필요한 정보들을 client에서 가져오면 
@@ -95,6 +99,38 @@ app.get('/api/users/logout', auth, (req, res) => {
                 success: true
             })
         })
+})
+
+
+
+// 여기서부터 Favorite DB 관리
+
+app.post('/api/favorite/favoriteNumber', (req, res) => {
+    // mongoDB에서 favorite 숫자 가져오기
+    Favorite.find({
+        "movieId": req.body.movieId
+    }).exec((err, info) => {
+        if (err) return res.status(400).send(err)
+        // 가져온 favorite 숫자 정보를 프론트에 다시 보내주기
+        res.status(200).json({ success: true, favoriteNumber: info.length })
+
+    })
+})
+
+app.post('/api/favorite/favorited', (req, res) => {
+    Favorite.find({
+        "movieId": req.body.movieId,
+        "userFrom": req.body.userFrom
+    }).exec((err, info) => {
+        if (err) return res.status(400).send(err)
+
+        let result = false;
+        if (info.length !== 0) {
+            result = true;
+        }
+
+        res.status(200).json({ success: true, favorited: result })
+    })
 })
 
 app.listen(port, () => {
