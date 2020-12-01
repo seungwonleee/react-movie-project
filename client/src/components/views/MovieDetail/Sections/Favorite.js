@@ -1,5 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Button } from 'antd';
+import like from '../likeImage/like.png';
+import notLike from '../likeImage/notLike.png';
 
 function Favorite(props) {
 
@@ -12,12 +15,16 @@ function Favorite(props) {
     const [favoriteNumber, setFavoriteNumber] = useState(0);
     const [favorited, setFavorited] = useState(false);
 
+    let variables = {
+        userFrom,
+        movieId,
+        movieTitle,
+        moviePost,
+        movieRunTime
+    }
+
     useEffect(() => {
 
-        let variables = {
-            userFrom,
-            movieId,
-        }
 
         axios.post('/api/favorite/favoriteNumber', variables)
             .then(res => {
@@ -41,9 +48,35 @@ function Favorite(props) {
 
     }, [])
 
+    const onClickFavorite = () => {
+        if (favorited) {
+            axios.post('/api/favorite/removeFromFavorite', variables)
+                .then(res => {
+                    if (res.data.success) {
+                        setFavoriteNumber(favoriteNumber - 1);
+                        setFavorited(!favorited);
+                    } else {
+                        alert('Favorite 리스트에서 지우는 걸 실패했습니다.');
+                    }
+                })
+        } else {
+            axios.post('/api/favorite/addToFavorite', variables)
+                .then(res => {
+                    if (res.data.success) {
+                        setFavoriteNumber(favoriteNumber + 1);
+                        setFavorited(!favorited);
+                    } else {
+                        alert('Favorite 리스트에서 추가하는 걸 실패했습니다.');
+                    }
+                })
+        }
+    }
+
     return (
         <div>
-            <button>{favorited ? 'Not Favorite' : 'Add to Favorite'} {favoriteNumber}</button>
+            <Button style={{ border: 'none' }} onClick={onClickFavorite}>{favorited ? <img style={{ width: '1.5rem' }} src={like} alt="좋아요 버튼" /> : <img style={{ width: '1.5rem' }} src={notLike} alt="좋아요 취소" />}</Button>
+
+            <span>{favoriteNumber}</span>
         </div>
     )
 }
