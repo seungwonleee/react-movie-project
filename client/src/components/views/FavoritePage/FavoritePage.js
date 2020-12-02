@@ -6,22 +6,40 @@ import { IMAGE_BASE_URL } from '../../Config';
 
 function FavoritePage() {
 
-
     const [favorites, setFavorites] = useState([]);
 
     useEffect(() => {
+        axiosFavoriteMovie();
+    }, [])
+
+    const axiosFavoriteMovie = () => {
         axios.post('/api/favorite/getFavoriteMovie', { userFrom: localStorage.getItem('userId') })
             .then(res => {
                 if (res.data.success) {
                     // console.log(favorites)
                     console.log(res.data.favorites)
-                    setFavorites(favorites.concat(...res.data.favorites));
+                    setFavorites(res.data.favorites);
                 } else {
                     alert('영화 정보를 가져오는데 실패했습니다.');
                 }
             })
+    }
 
-    }, [])
+    const onClickDelete = (movieId, userFrom) => {
+        const variables = {
+            movieId,
+            userFrom
+        }
+
+        axios.post('/api/favorite/removeFromFavoriteMovie', variables)
+            .then(res => {
+                if (res.data.success) {
+                    axiosFavoriteMovie();
+                } else {
+                    alert('좋아요 목록에서 삭제하는데 실패했습니다.');
+                }
+            })
+    }
 
     const renderCards = favorites.map((favorite, index) => {
 
@@ -37,7 +55,7 @@ function FavoritePage() {
                 <td>{favorite.movieTitle}</td>
             </Popover>
             <td>{favorite.movieRunTime} 분</td>
-            <td><button>Remove</button></td>
+            <td><button onClick={() => onClickDelete(favorite.movieId, favorite.userFrom)}>삭제</button></td>
         </tr>
     })
 

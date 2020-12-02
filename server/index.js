@@ -162,9 +162,13 @@ app.post('/api/favorite/getFavoriteMovie', (req, res) => {
         })
 })
 
-
-
-
+app.post('/api/favorite/removeFromFavoriteMovie', (req, res) => {
+    Favorite.findOneAndDelete({ movieId: req.body.movieId, userFrom: req.body.userFrom })
+        .exec((err, result) => {
+            if (err) return res.status(400).send(err);
+            return res.status(200).json({ success: true })
+        })
+})
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
