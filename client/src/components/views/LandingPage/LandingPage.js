@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { API_KEY, API_URL, IMAGE_BASE_URL } from '../../Config';
 import MainImage from '../LandingPage/Sections/MainImage';
 import GridCard from '../commons/GridCard';
 import { Row } from 'antd';
+
 
 function LandingPage(props) {
 
@@ -29,30 +30,9 @@ function LandingPage(props) {
         setPage(page + 1);
     }
 
-
-    const onClickHandler = () => {
-        axios.get(`/api/users/logout`)
-            .then(res => {
-                if (res.data.success) {
-                    console.log('logout !!!')
-                    props.history.push('/login');
-                    // 로그아웃시 로컬스토리지 저장된 아이디 삭제
-                    window.localStorage.removeItem('userId');
-                } else {
-                    alert('로그아웃 하는데 실패했습니다.')
-                }
-            });
-    }
-
     return (
         <>
-            {/* 메뉴바 만들어서 라우팅 시켜주기 *** 아직 미완성 */}
-            <div style={{ display: 'flex', justifyContent: 'flex-end', fontSize: '3rem' }}>
-                <button onClick={onClickHandler}>로그아웃</button>
-            </div>
-
             <div style={{ width: '100%', margin: '0' }}>
-
                 {/* main image 비동기 작업때문에 데이터가 렌더링 되지 않으므로 &&로 값이 할당될때 렌더링하게 하기*/}
                 {movieMainImage &&
                     <MainImage

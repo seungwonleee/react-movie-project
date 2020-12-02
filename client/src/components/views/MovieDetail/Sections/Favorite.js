@@ -25,7 +25,6 @@ function Favorite(props) {
 
     useEffect(() => {
 
-
         axios.post('/api/favorite/favoriteNumber', variables)
             .then(res => {
                 console.log('favoriteNumber =>', res.data)
@@ -75,7 +74,6 @@ function Favorite(props) {
     return (
         <div>
             <Button style={{ border: 'none' }} onClick={onClickFavorite}>{favorited ? <img style={{ width: '1.5rem' }} src={like} alt="좋아요 버튼" /> : <img style={{ width: '1.5rem' }} src={notLike} alt="좋아요 취소" />}</Button>
-
             <span>{favoriteNumber}</span>
         </div>
     )

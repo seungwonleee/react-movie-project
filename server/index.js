@@ -14,6 +14,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 const mongoose = require('mongoose');
+const { restart } = require('nodemon');
 mongoose.connect(config.mongoURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -152,6 +153,16 @@ app.post('/api/favorite/removeFromFavorite', (req, res) => {
         res.status(200).json({ success: true, doc })
     })
 })
+
+app.post('/api/favorite/getFavoriteMovie', (req, res) => {
+    Favorite.find({ 'userFrom': req.body.userFrom })
+        .exec((err, favorites) => {
+            if (err) return res.status(400).send(err);
+            return res.status(200).json({ success: true, favorites })
+        })
+})
+
+
 
 
 
