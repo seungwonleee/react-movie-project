@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { useState } from 'react';
 import { Drawer, Button } from 'antd';
 
@@ -19,7 +18,6 @@ const Navbar = () => {
     const onClose = () => {
         setVisible(false)
     };
-
 
     return (
         <nav className="menuBar">
@@ -55,16 +53,3 @@ const Navbar = () => {
 }
 
 export default Navbar;
-=======
-import React from 'react'
-
-function NavBar() {
-    return (
-        <div>
-            NavBar
-        </div>
-    )
-}
-
-export default NavBar
->>>>>>> 14eb53f9cb5b4e25d3928e2d054b0bfa27c51498
