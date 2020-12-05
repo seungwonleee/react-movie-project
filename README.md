@@ -1,7 +1,7 @@
 # usage
 1. server 폴더 안에 있는 config 폴더 안에 dev.js 파일을 생성한다.
 2. MongoDB와 연결하기 위해서 dev.js file에 module.exports = { mongoURI: << MongoDB 주소 >> } 를 입력한다.
-3. components 폴더에 Config.js 파일을 생성하고
+3. components 폴더에 Config.js 파일을 생성하고 아래 코드 입력(themoviedb)
 ```
     export const API_KEY = '<<API KEY>>';
 
